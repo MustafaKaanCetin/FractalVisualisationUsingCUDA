@@ -8,7 +8,7 @@ int height = 1000;
 int max_iter = 200;
 
 float zoom = 1.0f;
-float zoom_factor = 1.003f;
+float zoom_factor = 1.0025f;
 float centerX = -1.05f;
 float centerY = 0.25f;
 
