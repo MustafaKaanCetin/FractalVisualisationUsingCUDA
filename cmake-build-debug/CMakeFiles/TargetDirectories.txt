@@ -1,3 +1,0 @@
-/home/kein_roboter/Projects/C++/FractalGPU/cmake-build-debug/CMakeFiles/FractalGPU.dir
-/home/kein_roboter/Projects/C++/FractalGPU/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/kein_roboter/Projects/C++/FractalGPU/cmake-build-debug/CMakeFiles/rebuild_cache.dir
