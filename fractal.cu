@@ -4,17 +4,17 @@ __device__ int map(int value, int start1, int stop1, int start2, int stop2) {
     return start2 + (stop2 - start2) * ((value - start1) / (float)(stop1 - start1));
 }
 
-__global__ void fractal_kernel(int width, int height, int max_iter, unsigned char* image, float zoom, float centerX, float centerY) {
+__global__ void fractal_kernel(int width, int height, int max_iter, unsigned char* image, double zoom, double centerX, double centerY) {
 
     int x = blockIdx.x * blockDim.x + threadIdx.x;
     int y = blockIdx.y * blockDim.y + threadIdx.y;
 
     if(x < width && y < height) {
-        float zx, zy, cX, cY;
+        double zx, zy, cX, cY;
         zx = zy = 0.0f;
         cX = (x - width / 2.0f) * 4.0f / (width * zoom) + centerX;
         cY = (y - height / 2.0f) * 4.0f / (height * zoom) + centerY;
-        float zx2 = 0.0f, zy2 = 0.0f;
+        double zx2 = 0.0f, zy2 = 0.0f;
         int iter = 0;
         while (zx * zx + zy * zy < 4.0f && iter < max_iter) {
             zy = 2.0f * zx * zy +cY;
@@ -42,13 +42,13 @@ __global__ void fractal_kernel(int width, int height, int max_iter, unsigned cha
 
 }
 
-extern "C" void launch_kernel(int width, int height, int max_iter, unsigned char* image, float zoom, float centerX, float centerY) {
+extern "C" void launch_kernel(int width, int height, int max_iter, unsigned char* image, double zoom, double centerX, double centerY) {
     unsigned char* d_image;
     size_t image_size = width * height * 3 * sizeof(unsigned char);
     cudaMalloc(&d_image, image_size);
     cudaMemcpy(d_image, image, image_size, cudaMemcpyHostToDevice);
 
-    dim3 threadsPerBlock(16, 16);
+    dim3 threadsPerBlock(32, 32);
     dim3 numBlocks((width + threadsPerBlock.x - 1) / threadsPerBlock.x,
                    (height + threadsPerBlock.y - 1) / threadsPerBlock.y);
     fractal_kernel<<<numBlocks, threadsPerBlock>>>(width, height, max_iter, d_image, zoom, centerX, centerY);
